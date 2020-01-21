@@ -6,7 +6,7 @@ var actionCreeps = require('action.Creeps');
 
 var core = {
     loop: function () {
-        //utilsSpawns.spawnCreeps();
+        utilsSpawns.spawnCreeps();
         for(var name in Memory.creeps) {
             var creep = Game.creeps[name];
             if(creep == undefined)
