@@ -7,7 +7,7 @@ var utilsSpawns = {
             var spawn = Game.spawns[key];
             spawn.spawnCreep(
                 creepDef.body, 
-                creepDef.name + '_' + Math.random().toString(36).substr(2, 3),
+                creepDef.role + '_' + Math.random().toString(36).substr(2, 3),
                 {
                     memory: {def: creepDef}
                 }
@@ -19,7 +19,7 @@ var utilsSpawns = {
         var creepsOfEachRole = utilsRoles.getCreepsOfEachRole();
         for (var key in config.roles) {
             var roleDef = config.roles[key];
-            if (creepsOfEachRole[roleDef.name] < roleDef.num) {
+            if (creepsOfEachRole[roleDef.role] < roleDef.num) {
                 this.spawnCreep(roleDef);
             }
         }
