@@ -1,3 +1,5 @@
+var core = require('core');
+
 module.exports.loop = function () {
-    console.log('hello, world!');
+    core.loop();
 }
