@@ -1,12 +1,25 @@
 var utilsRooms = {
-    getAllSources: function(room){
-        var sources = room.find(FIND_SOURCES_ACTIVE);
-        return sources;
+    getAllSources: (room) => room.find(FIND_SOURCES),
+    getAllAvailableSources: (room) => room.find(FIND_SOURCES_ACTIVE),
+    getAllMyConstructionSites: (room) => room.find(FIND_MY_CONSTRUCTION_SITES),
+    getAllMyEnergyContainer: function (room) {
+        var storages = room.find(FIND_MY_STRUCTURES, { filter: (structure) => structure.structureType == STRUCTURE_CONTAINER });
     },
-    getAllAvailableSources: function(room) {
-        var sources = room.find(FIND_SOURCES_ACTIVE);
-        var availableSources = _.filter(sources, (source) => source.energy > 0);
-        return availableSources;
+    getMyLowestHitsStructure: (room) => {
+        var structures = room.find(FIND_MY_STRUCTURES);
+        var minHits = 100000000;
+        var minHitsStruct = null;
+        for (var key in structures) {
+            var structure = structures[key];
+            if (structure.hits == structure.hitsMax) {
+                continue;
+            }
+            if (structure.hits < minHits) {
+                minHits = structure.hits;
+                minHitsStruct = structure;
+            }
+        }
+        return minHitsStruct;
     }
 }
 

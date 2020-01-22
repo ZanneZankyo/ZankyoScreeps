@@ -5,7 +5,7 @@ var config = {
     roles: {
         harvester: {
             role: 'harvester',
-            num: 4,
+            num: 10,
             body: [WORK, CARRY, MOVE],
             run: (creep) => creepsHarvester.run(creep)
         },

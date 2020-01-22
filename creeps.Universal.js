@@ -1,5 +1,5 @@
 var creepsUniversal = {
-    renew: function () {
+    renew: function (creep) {
         
     }
 }

@@ -1,4 +1,5 @@
 var utilsRooms = require('utils.Rooms');
+var creepsUniversal = require('creeps.Universal');
 
 var creepsHarvester = {
     run: function (creep) {
@@ -24,6 +25,7 @@ var creepsHarvester = {
                 var source = sources[key];
                 var path = PathFinder.search(creep.pos, { pos: source.pos, range: 1 });
                 if (path.incomplete) {
+                    console.log('Path incomplete:' + path);
                     continue;
                 }
                 if (path.cost < minCost) {
@@ -34,15 +36,15 @@ var creepsHarvester = {
             }
         }
     },
-    doWork: function(creep){
+    doWork: function (creep) {
         var ret = undefined;
 
         ret = creep.harvest(Game.getObjectById(creep.memory.target.id));
         if (ret == OK || ret == ERR_NOT_IN_RANGE) {
-            if(ret == OK && creep.store.getFreeCapacity() == 0){
+            if (ret == OK && creep.store.getFreeCapacity() == 0) {
                 creep.memory.target = undefined;
             }
-            if(ret == ERR_NOT_IN_RANGE){
+            if (ret == ERR_NOT_IN_RANGE) {
                 this.moveToTarget(creep);
             }
             return;
@@ -50,10 +52,10 @@ var creepsHarvester = {
 
         ret = creep.upgradeController(Game.getObjectById(creep.memory.target.id));
         if (ret == OK || ret == ERR_NOT_IN_RANGE) {
-            if(ret == OK && creep.store.getUsedCapacity() == 0){
+            if (ret == OK && creep.store.getUsedCapacity() == 0) {
                 creep.memory.target = undefined;
             }
-            if(ret == ERR_NOT_IN_RANGE){
+            if (ret == ERR_NOT_IN_RANGE) {
                 this.moveToTarget(creep);
             }
             return;
@@ -62,9 +64,9 @@ var creepsHarvester = {
         console.log('unexpect retuen: ' + ret);
         creep.memory.target = undefined;
     },
-    moveToTarget: function(creep){
+    moveToTarget: function (creep) {
         var ret = creep.moveTo(Game.getObjectById(creep.memory.target.id));
-        if(ret==ERR_NO_PATH){
+        if (ret == ERR_NO_PATH) {
             console.log(creep.name + ' can not find path to ' + creep.memory.target.pos + ', find another target...');
             this.findTarget(creep);
         }

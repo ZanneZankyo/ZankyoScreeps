@@ -1,7 +1,7 @@
 var utilsRooms = require('utils.Rooms');
 
 var creepsUpgrader = {
-    run: function(creep) {
+    run: function (creep) {
         console.log('harvester');
     }
 }
