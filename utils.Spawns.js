@@ -1,4 +1,5 @@
 var utilsRoles = require('utils.Roles');
+var utilsRooms = require('utils.Rooms');
 var config = require('config');
 
 var utilsSpawns = {
@@ -18,11 +19,17 @@ var utilsSpawns = {
             break;
         }
     },
-    spawnCreeps: function () {
+    spawnCreeps: function (spawn) {
         var creepsOfEachRole = utilsRoles.getCreepsOfEachRole();
         for (var role in config.roles) {
             var roleDef = config.roles[role];
             if (creepsOfEachRole[role] < roleDef.num) {
+                /*if(role == config.ROLE_BUILDER && utilsRooms.getAllMyConstructionSites(spawn.room).length == 0){
+                    continue;
+                }
+                if(role == config.ROLE_REPAIRER && utilsRooms.getMyLowestHitsStructure(spawn.room) == undefined) {
+                    continue;
+                }*/
                 this.spawnCreep(roleDef);
                 //console.log('spawn a new ' + role + ', current num: ' + creepsOfEachRole[role]);
             }

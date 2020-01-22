@@ -12,28 +12,12 @@ var creepsHarvester = {
         }
     },
     findTarget: function (creep) {
-        if (creep.store.getFreeCapacity(RESOURCE_ENERGY) < creep.store.getUsedCapacity(RESOURCE_ENERGY)) {
-            var controller = creep.room.controller;
-            var path = PathFinder.search(creep.pos, { pos: controller.pos, range: 1 });
-            creep.memory.target = controller;
-            creep.memory.path = path;
+        if (creep.store.getFreeCapacity(RESOURCE_ENERGY) > creep.store.getUsedCapacity(RESOURCE_ENERGY)) {
+            creepsUniversal.findSource(creep);
         }
-        else {
-            var sources = utilsRooms.getAllAvailableSources(creep.room);
-            var minCost = 99999;
-            for (var key in sources) {
-                var source = sources[key];
-                var path = PathFinder.search(creep.pos, { pos: source.pos, range: 1 });
-                if (path.incomplete) {
-                    console.log('Path incomplete:' + path);
-                    continue;
-                }
-                if (path.cost < minCost) {
-                    creep.memory.target = source;
-                    creep.memory.path = path;
-                    minCost = path.cost;
-                }
-            }
+        else {    
+            var controller = creep.room.controller;
+            creep.memory.target = controller;
         }
     },
     doWork: function (creep) {
@@ -61,7 +45,7 @@ var creepsHarvester = {
             return;
         }
 
-        console.log('unexpect retuen: ' + ret);
+        console.log(creep.name + ': unexpect retuen: ' + ret);
         creep.memory.target = undefined;
     },
     moveToTarget: function (creep) {
