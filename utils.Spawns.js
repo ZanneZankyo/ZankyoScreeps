@@ -17,10 +17,11 @@ var utilsSpawns = {
     },
     spawnCreeps: function () {
         var creepsOfEachRole = utilsRoles.getCreepsOfEachRole();
-        for (var key in config.roles) {
-            var roleDef = config.roles[key];
-            if (creepsOfEachRole[roleDef.role] < roleDef.num) {
+        for (var role in config.roles) {
+            var roleDef = config.roles[role];
+            if (creepsOfEachRole[role] < roleDef.num) {
                 this.spawnCreep(roleDef);
+                console.log('spawn a new ' + role + ', current num: ' + creepsOfEachRole[role]);
             }
         }
     }

@@ -3,10 +3,10 @@ var config = require('config');
 var utilsRoles = {
     getCreepsOfEachRole: function () {
         var creepsOfEachRole = [];
-        for (var key in config.roles) {
-            var roleDef = config.roles[key];
-            var creepsOfThisRole = _.filter(Game.creeps, (creep) => creep.memory.role == roleDef.name);
-            creepsOfEachRole[roleDef.name] = creepsOfThisRole.length;
+        for (var role in config.roles) {
+            var roleDef = config.roles[role];
+            var creepsOfThisRole = _.filter(Game.creeps, (creep) => creep.memory.def.role == role);
+            creepsOfEachRole[role] = creepsOfThisRole.length;
         }
         return creepsOfEachRole;
     }
