@@ -1,7 +1,8 @@
 var utilsRooms = require('utils.Rooms');
 var creepsUniversal = require('creeps.Universal');
 
-var creepsUpgrader = {
+
+var creepsStarter = {
     run: function (creep) {
         if (creep.memory.target == undefined) {
             this.findTarget(creep);
@@ -13,39 +14,21 @@ var creepsUpgrader = {
     },
     findTarget: function (creep) {
         if (creep.store.getFreeCapacity(RESOURCE_ENERGY) > creep.store.getUsedCapacity(RESOURCE_ENERGY)) {
-            creepsUniversal.findNearestStoreHasEnergy(creep);
-            if(creep.memory.target == undefined) {
-                creepsUniversal.findSource(creep);
-            }
+            creepsUniversal.findSource(creep);
         }
         else {    
-            creep.memory.target = creep.room.controller;
+            var spawn = utilsRooms.getMySpawn(creep.room);
+            console.log('spawn free: ' + spawn.store.getFreeCapacity(RESOURCE_ENERGY));
+            if(spawn.store.getFreeCapacity(RESOURCE_ENERGY) > 0){
+                creep.memory.target = spawn;
+            }
+            else{
+                creep.memory.target = creep.room.controller;
+            }
         }
     },
     doWork: function (creep) {
         var ret = undefined;
-
-        ret = creep.withdraw(Game.getObjectById(creep.memory.target.id), RESOURCE_ENERGY);
-        if (ret == OK || ret == ERR_NOT_IN_RANGE) {
-            if (ret == OK && creep.store.getFreeCapacity() == 0) {
-                creep.memory.target = undefined;
-            }
-            if (ret == ERR_NOT_IN_RANGE) {
-                creepsUniversal.moveToTarget(creep);
-            }
-            return;
-        }
-
-        ret = creep.upgradeController(Game.getObjectById(creep.memory.target.id));
-        if (ret == OK || ret == ERR_NOT_IN_RANGE) {
-            if (ret == ERR_NOT_ENOUGH_ENERGY) {
-                creep.memory.target = undefined;
-            }
-            if (ret == ERR_NOT_IN_RANGE) {
-                creepsUniversal.moveToTarget(creep);
-            }
-            return;
-        }
 
         ret = creep.harvest(Game.getObjectById(creep.memory.target.id));
         if (ret == OK || ret == ERR_NOT_IN_RANGE) {
@@ -58,9 +41,9 @@ var creepsUpgrader = {
             return;
         }
 
-        ret = creep.pickup(Game.getObjectById(creep.memory.target.id));
+        ret = creep.transfer(Game.getObjectById(creep.memory.target.id), RESOURCE_ENERGY, creep.store.getUsedCapacity(RESOURCE_ENERGY));
         if (ret == OK || ret == ERR_NOT_IN_RANGE) {
-            if (ret == OK && creep.store.getFreeCapacity() == 0) {
+            if (ret == OK && creep.store.getUsedCapacity() == 0) {
                 creep.memory.target = undefined;
             }
             if (ret == ERR_NOT_IN_RANGE) {
@@ -72,6 +55,6 @@ var creepsUpgrader = {
         console.log(creep.name + ': unexpect retuen: ' + ret);
         creep.memory.target = undefined;
     }
-}
+};
 
-module.exports = creepsUpgrader;
+module.exports = creepsStarter;

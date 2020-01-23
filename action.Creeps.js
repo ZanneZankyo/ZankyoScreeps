@@ -1,19 +1,22 @@
-var utilsRooms = require('utils.Rooms');
+var types = require('types');
 var config = require('config');
+var utilsRooms = require('utils.Rooms');
 
 var actionCreep = {
     run: function (creep) {
         if (creep.spawning) {
             return;
         }
-        if(creep.memory.def == undefined || config.roles[creep.memory.def.role] == undefined || config.roles[creep.memory.def.role].run == undefined)
+        if(creep.memory.role == undefined || config.roles[creep.memory.role] == undefined || config.roles[creep.memory.role].run == undefined)
         {
-            var spawn = utilsRooms.getMySpawn(creep.room);
+            creep.memory.role = types.ROLE_HARVESTER;
+            /*var spawn = utilsRooms.getMySpawn(creep.room);
             if(spawn.recycleCreep(creep) != OK){
                 spawn.moveTo(spawn);
-            }
+            }*/
         }
-        config.roles[creep.memory.def.role].run(creep);
+        //console.log(config.roles[creep.memory.role].run);
+        config.roles[creep.memory.role].run(creep);
         //creep.memory.run(creep);
     }
 }

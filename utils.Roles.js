@@ -5,7 +5,7 @@ var utilsRoles = {
         var creepsOfEachRole = [];
         for (var role in config.roles) {
             var roleDef = config.roles[role];
-            var creepsOfThisRole = _.filter(Game.creeps, (creep) => creep.memory.def.role == role);
+            var creepsOfThisRole = _.filter(Game.creeps, (creep) => creep.memory.role == role);
             creepsOfEachRole[role] = creepsOfThisRole.length;
         }
         return creepsOfEachRole;

@@ -16,8 +16,7 @@ var creepsHarvester = {
             creepsUniversal.findSource(creep);
         }
         else {    
-            var controller = creep.room.controller;
-            creep.memory.target = controller;
+            creep.memory.target = creep.room.controller;
         }
     },
     doWork: function (creep) {
@@ -51,7 +50,7 @@ var creepsHarvester = {
     moveToTarget: function (creep) {
         var ret = creep.moveTo(Game.getObjectById(creep.memory.target.id));
         if (ret == ERR_NO_PATH) {
-            console.log(creep.name + ' can not find path to ' + creep.memory.target.pos + ', find another target...');
+            console.log(creep.name + ' can not find path to [' + creep.memory.target.pos.x + ',' + creep.memory.target.pos.y + '] find another target...');
             this.findTarget(creep);
         }
     }

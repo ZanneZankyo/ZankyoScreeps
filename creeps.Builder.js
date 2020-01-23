@@ -12,7 +12,10 @@ var creepsBuilder = {
     },
     findTarget: function (creep) {
         if (creep.store.getUsedCapacity() < creep.store.getFreeCapacity()) {
-            creepsUniversal.findSource(creep);
+            creepsUniversal.findNearestStoreHasEnergy(creep);
+            if(creep.memory.target == undefined) {
+                creepsUniversal.findSource(creep);
+            }
         }
         else {
             var constructionSites = utilsRooms.getAllMyConstructionSites(creep.room);
@@ -37,9 +40,9 @@ var creepsBuilder = {
             return;
         }
 
-        ret = creep.build(Game.getObjectById(creep.memory.target.id));
+        ret = creep.pickup(Game.getObjectById(creep.memory.target.id));
         if (ret == OK || ret == ERR_NOT_IN_RANGE) {
-            if (ret == OK && creep.store.getUsedCapacity() == 0) {
+            if (ret == OK && creep.store.getFreeCapacity() == 0) {
                 creep.memory.target = undefined;
             }
             if (ret == ERR_NOT_IN_RANGE) {
@@ -47,14 +50,40 @@ var creepsBuilder = {
             }
             return;
         }
-
-        ret = creep.repair(Game.getObjectById(creep.memory.target.id));
+        
+        ret = creep.withdraw(Game.getObjectById(creep.memory.target.id));
         if (ret == OK || ret == ERR_NOT_IN_RANGE) {
-            if (ret == OK && creep.store.getUsedCapacity() == 0) {
+            if (ret == OK && creep.store.getFreeCapacity() == 0) {
                 creep.memory.target = undefined;
             }
             if (ret == ERR_NOT_IN_RANGE) {
                 creepsUniversal.moveToTarget(creep);
+            }
+            //console.log(creep.name,' did pickup');
+            return;
+        }
+
+        ret = creep.build(Game.getObjectById(creep.memory.target.id));
+        if (ret == OK || ret == ERR_NOT_IN_RANGE || ret == ERR_NOT_ENOUGH_ENERGY) {
+            if (ret == ERR_NOT_ENOUGH_RESOURCES) {
+                creep.memory.target = undefined;
+            }
+            if (ret == ERR_NOT_IN_RANGE) {
+                creepsUniversal.moveToTarget(creep);
+            }
+            //console.log(creep.name,' did build');
+            return;
+        }
+
+        ret = creep.repair(Game.getObjectById(creep.memory.target.id));
+        if (ret == OK || ret == ERR_NOT_IN_RANGE || ret == ERR_NOT_ENOUGH_ENERGY) {
+            if (ret == ERR_NOT_ENOUGH_RESOURCES) {
+                creep.memory.target = undefined;
+                console.log(creep.name,' did repair: no resource');
+            }
+            if (ret == ERR_NOT_IN_RANGE) {
+                creepsUniversal.moveToTarget(creep);
+                console.log(creep.name,' did repair move');
             }
             return;
         }

@@ -8,7 +8,7 @@ var core = {
     loop: function () {
         for(var name in Game.spawns){
             var spawn = Game.spawns[name];
-            utilsSpawns.spawnCreeps(spawn);
+            utilsSpawns.checkAndSpawn(spawn);
         }
         for (var name in Memory.creeps) {
             var creep = Game.creeps[name];
