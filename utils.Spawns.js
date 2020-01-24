@@ -8,12 +8,13 @@ var utilsSpawns = {
             return;
         }
         var checklist = config.spawnCheckOrder();
+        spawn.memory.nextSpawn = undefined;
         for(var index in checklist) {
             var role = checklist[index];
             var roleDef = config.roles[role];
             if(roleDef.shouldSpawn(spawn.room)){
-                console.log('Try to spawn ' + role);
-                this.spawnCreep(spawn, config.roles[role]);
+                spawn.memory.nextSpawn = role;
+                this.spawnCreep(spawn, roleDef);
                 break;
             }
         }

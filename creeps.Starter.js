@@ -13,7 +13,8 @@ var creepsStarter = {
         }
     },
     findTarget: function (creep) {
-        if (creep.store.getFreeCapacity(RESOURCE_ENERGY) > creep.store.getUsedCapacity(RESOURCE_ENERGY)) {
+        creepsUniversal.decideGathering(creep);
+        if (creep.memory.isGathering) {
             creepsUniversal.findSource(creep);
         }
         else {    

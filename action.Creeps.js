@@ -9,11 +9,11 @@ var actionCreep = {
         }
         if(creep.memory.role == undefined || config.roles[creep.memory.role] == undefined || config.roles[creep.memory.role].run == undefined)
         {
-            creep.memory.role = types.ROLE_HARVESTER;
-            /*var spawn = utilsRooms.getMySpawn(creep.room);
+            //creep.memory.role = types.ROLE_HARVESTER;
+            var spawn = utilsRooms.getMySpawn(creep.room);
             if(spawn.recycleCreep(creep) != OK){
                 spawn.moveTo(spawn);
-            }*/
+            }
         }
         //console.log(config.roles[creep.memory.role].run);
         config.roles[creep.memory.role].run(creep);

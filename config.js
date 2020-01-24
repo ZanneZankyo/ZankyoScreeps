@@ -5,6 +5,7 @@ var creepsUpgrader = require('creeps.Upgrader');
 var creepsBuilder = require('creeps.Builder');
 var creepsRepairer = require('creeps.Repairer');
 var creepsStaticHarvester = require('creeps.StaticHarvester');
+var creepsCarrier = require('creeps.Carrier');
 
 var config = {
     roles: {
@@ -43,12 +44,19 @@ var config = {
             shouldSpawn: (room) => config.shouldSpawnStaticHarvester(room),
             body: () => [WORK, WORK, MOVE],
             run: (creep) => creepsStaticHarvester.run(creep)
+        },
+        carrier: {
+            role: () => types.ROLE_CARRIER,
+            shouldSpawn: (room) => config.shouldSpawnCarrier(room),
+            body: () => [CARRY, CARRY, CARRY, MOVE],
+            run: (creep) => creepsCarrier.run(creep)
         }
     },
     spawnCheckOrder: () => [
         types.ROLE_STARTER, 
         types.ROLE_STATIC_HARVESTER,
         types.ROLE_HARVESTER, 
+        types.ROLE_CARRIER,
         types.ROLE_REPAIRER,
         types.ROLE_UPGRADER, 
         types.ROLE_BUILDER, 
@@ -61,12 +69,14 @@ var config = {
     shouldSpawnUpgrader: (room) => room.find(FIND_STRUCTURES, {filter: (structure) => structure.structureType == STRUCTURE_CONTAINER}).length > 0
                                 && room.find(FIND_MY_CREEPS, {filter: (creep) => creep.memory.role == types.ROLE_UPGRADER}).length < 3,
     shouldSpawnBuilder: (room) => room.find(FIND_MY_CONSTRUCTION_SITES).length > 0
-                               && room.find(FIND_MY_CREEPS, {filter: (creep) => creep.memory.role == types.ROLE_BUILDER}).length < 1,
+                               && room.find(FIND_MY_CREEPS, {filter: (creep) => creep.memory.role == types.ROLE_BUILDER}).length < 2,
     shouldSpawnRepairer: (room) => room.find(FIND_STRUCTURES, {filter: (structure) => structure.hits < structure.hitsMax}).length > 0
                                 && room.find(FIND_MY_CREEPS, {filter: (creep) => creep.memory.role == types.ROLE_REPAIRER}).length < 2,
     shouldSpawnStaticHarvester: (room) => room.find(FIND_STRUCTURES, {filter: (structure) => structure.structureType == STRUCTURE_CONTAINER}).length > 0
                                        && room.find(FIND_MY_CREEPS, {filter: (creep) => creep.memory.role == types.ROLE_STATIC_HARVESTER}).length
-                                        < room.find(FIND_STRUCTURES, {filter: (structure) => structure.structureType == STRUCTURE_CONTAINER}).length
+                                        < room.find(FIND_STRUCTURES, {filter: (structure) => structure.structureType == STRUCTURE_CONTAINER}).length,
+    shouldSpawnCarrier: (room) => room.find(FIND_STRUCTURES, {filter: (structure) => structure.structureType == STRUCTURE_CONTAINER}).length > 0
+                               && room.find(FIND_MY_CREEPS, {filter: (creep) => creep.memory.role == types.ROLE_CARRIER}).length < 1
 };
 
 module.exports = config;
